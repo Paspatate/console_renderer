@@ -1,11 +1,11 @@
 #[derive(Debug)]
-pub struct Vector2f {
-    x: f64,
-    y: f64,
+pub struct Vector2<T> {
+    x: T,
+    y: T,
 }
 
-impl Vector2f {
-    pub fn new(x:f64, y:f64) -> Vector2f {
-        Vector2f { x, y }
+impl<T> Vector2<T> {
+    pub fn new(x:T, y:T) -> Vector2<T> {
+        Vector2 { x, y }
     }
 }
