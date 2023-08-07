@@ -1,5 +1,6 @@
-use console_renderer::math;
-use console::Term;
+use console_renderer::{math, Screen};
+use std::{thread, time::Duration};
+//use console::Term;
 
 fn main() -> Result<(), Box<dyn std::error::Error>>{
     let test_vec2 = math::Vector2::new(1f64, 5f64);
@@ -9,15 +10,35 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
     assert_eq!(test_vec2.x, target_vec2.x);
 
     println!("{:?}", test_vec2);
-    
-    println!("This is {} neat", console::style("quite").cyan());
 
-    let term: Term = Term::stdout();
-    term.clear_screen();
+    let mut screen = Screen::new(String::from("Bonjour"));
+
+    let mut bg;
+    let mut count:u64 = 0;
     loop {
-        term.write_line(&format!("{:?}", term.size())[..])?;
-        term.move_cursor_to(0, 0)?;
+        if count%2 == 1 {
+            bg = console::Color::Blue;    
+        } else {
+            bg = console::Color::Green;
+        }
+        screen.clear(&bg);
+        count += 1;
+        thread::sleep(Duration::from_millis(12));
     }
-
+    
+//    println!("This is {} neat", console::style("quite").cyan());
+//
+//    let style_t = console::Style::new();
+//
+//    println!("le fond est {}", style_t.bg(console::Color::Green).apply_to("Vert"));
+//
+//    let term: Term = Term::stdout();
+//    
+//    loop {
+//        term.write_line(&format!("{:?}", term.size())[..])?;
+//        term.move_cursor_to(0, 0)?;
+//        
+//    }
+//
     Ok(())
 }
