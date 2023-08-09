@@ -1,3 +1,5 @@
+use std::{thread, time::Duration};
+
 use console::{Term, Color, style};
 
 pub mod math;
@@ -24,9 +26,13 @@ impl Screen {
     }
 
     // clear the terminal with the background color specified
-    pub fn clear(&mut self, bg_color: &Color) {
+    pub fn clear(&mut self, bg_color: Option<&Color>) {
         self.size = self.term.size();
         let mut reset_line: String;
+        let bg_color = match bg_color {
+            Some(color) => color,
+            None => &Color::Black,
+        };
 
         if let Err(_) = self.term.move_cursor_to(0,0) {
 
@@ -34,7 +40,7 @@ impl Screen {
 
         for y in 0..=self.size.0 {
             reset_line = format!("{empty_char: >width$}",
-                empty_char = style(y).bg(*bg_color),
+                empty_char = style("").bg(*bg_color),
                 width = (self.size.1) as usize
             );
 
@@ -48,6 +54,10 @@ impl Screen {
 
     pub fn draw(&self) {
         todo!();
+    }
+
+    pub fn target_fps(fps: i32){
+        thread::sleep(Duration::from_secs_f32(1f32/fps as f32));
     }
 
 }

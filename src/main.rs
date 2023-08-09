@@ -17,13 +17,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
     let mut count:u64 = 0;
     loop {
         if count%2 == 1 {
-            bg = console::Color::Blue;    
+            bg = Some(&console::Color::Blue);    
         } else {
-            bg = console::Color::Green;
+            bg = None;
         }
-        screen.clear(&bg);
+        screen.clear(bg);
         count += 1;
-        thread::sleep(Duration::from_millis(12));
+
+        Screen::target_fps(30);
     }
     
 //    println!("This is {} neat", console::style("quite").cyan());
