@@ -1,8 +1,9 @@
-use std::{thread, time::Duration};
+use std::{thread, time::Duration, io::Write};
 
 use console::{Term, Color, style};
 
 pub mod math;
+pub mod shape;
 
 #[allow(dead_code)]
 pub struct Screen {
@@ -23,6 +24,12 @@ impl Screen {
             term, 
             elements: Vec::new(),
         }
+    }
+
+    pub fn set_at(&self, x: usize, y: usize, color: char) {
+        self.term.move_cursor_to(x, y);
+        print!("{}", color);
+        std::io::stdout().flush();
     }
 
     // clear the terminal with the background color specified
@@ -63,5 +70,5 @@ impl Screen {
 }
 
 pub trait Drawable {
-    fn draw(&self, destination:Term);
+    fn draw(&self, destination:Screen);
 }
