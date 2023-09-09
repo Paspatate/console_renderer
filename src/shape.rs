@@ -1,6 +1,4 @@
-use core::num;
-
-use crate::{Drawable, math};
+use crate::{Drawable, math, Screen};
 
 #[allow(dead_code)]
 pub struct Line{
@@ -10,7 +8,7 @@ pub struct Line{
 }
 
 impl Drawable for Line {
-    fn draw(&self, destination:crate::Screen) {
+    fn draw(&self, destination:&Screen) {
         /*
         public void line(int x,int y,int x2, int y2, int color) {
     int w = x2 - x ;
@@ -43,8 +41,8 @@ impl Drawable for Line {
 }
          */
         let (mut x, mut y, mut x2, mut y2) = (self.point1.x, self.point1.y, self.point2.x, self.point2.y);
-        let w = self.point2.x - self.point1.x;
-        let h = self.point2.y - self.point1.y;
+        let w = x2 - x;
+        let h = y2 - y;
         let (mut dx1, mut dy1, mut dx2, mut dy2) = (0,0,0,0);
         
         if w < 0 {dx1 = -1;} else if w > 0 {dx1 = 1;}
@@ -66,10 +64,10 @@ impl Drawable for Line {
         }
 
         let mut numerator: i32 = longest >> 1; // divide by 2;
-        for i in 0..longest {
+        for _i in 0..longest {
             destination.set_at(x as usize, y as usize, self.color);
             numerator += shortest;
-            if !numerator < longest {
+            if !(numerator < longest){
                 numerator -= longest;
                 x += dx1;
                 y += dy1;
@@ -78,9 +76,6 @@ impl Drawable for Line {
                 y += dy2;
             }
         }
-
-
-        todo!();
     }
 }
 

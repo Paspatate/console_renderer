@@ -1,5 +1,5 @@
-use console_renderer::{math, Screen};
-use std::{thread, time::Duration};
+use console_renderer::{math, Screen, Drawable};
+use console_renderer::shape::Line;
 //use console::Term;
 
 fn main() -> Result<(), Box<dyn std::error::Error>>{
@@ -12,18 +12,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
     println!("{:?}", test_vec2);
 
     let mut screen = Screen::new(String::from("Bonjour"));
+ 
+    let t_line = Line::new(math::Vector2::new(10, 17), math::Vector2::new(50, 4), '#');
 
-    let mut bg;
-    let mut count:u64 = 0;
     loop {
-        if count%2 == 1 {
-            bg = Some(&console::Color::Blue);    
-        } else {
-            bg = None;
-        }
-        screen.clear(bg);
-        count += 1;
-
+        screen.clear(None);
+        t_line.draw(&screen);
         Screen::target_fps(30);
     }
     

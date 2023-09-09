@@ -27,9 +27,9 @@ impl Screen {
     }
 
     pub fn set_at(&self, x: usize, y: usize, color: char) {
-        self.term.move_cursor_to(x, y);
+       if let Err(_) =  self.term.move_cursor_to(x, y) {}
         print!("{}", color);
-        std::io::stdout().flush();
+        let _ =  std::io::stdout().flush();
     }
 
     // clear the terminal with the background color specified
@@ -60,7 +60,9 @@ impl Screen {
     }
 
     pub fn draw(&self) {
-        todo!();
+        for element in &self.elements {
+            element.draw(self);
+        }
     }
 
     pub fn target_fps(fps: i32){
@@ -70,5 +72,5 @@ impl Screen {
 }
 
 pub trait Drawable {
-    fn draw(&self, destination:Screen);
+   fn draw(&self, destination:&Screen);
 }
