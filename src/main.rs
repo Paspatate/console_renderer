@@ -13,12 +13,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
 
     let mut screen = Screen::new(String::from("Bonjour"));
  
-    let t_line = Line::new(math::Vector2::new(10, 17), math::Vector2::new(50, 4), '#');
+    let mut a = 20f32;
+    let mut b = 10f32;
+    let mut t_line = Line::new(math::Vector2::new(10, 10), math::Vector2::new(a as i32, b as i32), '#');
 
     loop {
+        a = (a.cos() * 10f32) + 20f32;
+        b = (b.sin() * 10f32) + 20f32;
+
+        t_line.point2.x = a as i32;
+        t_line.point2.y = b as i32;
+
         screen.clear(None);
         t_line.draw(&screen);
-        Screen::target_fps(30);
+        Screen::target_fps(5);
     }
     
 //    println!("This is {} neat", console::style("quite").cyan());

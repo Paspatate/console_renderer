@@ -27,6 +27,7 @@ impl Screen {
     }
 
     pub fn set_at(&self, x: usize, y: usize, color: char) {
+        //TODO: fix for outside of the screen
        if let Err(_) =  self.term.move_cursor_to(x, y) {}
         print!("{}", color);
         let _ =  std::io::stdout().flush();
@@ -60,9 +61,7 @@ impl Screen {
     }
 
     pub fn draw(&self) {
-        for element in &self.elements {
-            element.draw(self);
-        }
+        self.elements.iter().for_each(|x|  x.draw(self));
     }
 
     pub fn target_fps(fps: i32){
