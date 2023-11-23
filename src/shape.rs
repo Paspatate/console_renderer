@@ -51,15 +51,15 @@ impl Drawable for Line {
         for _i in 0..longest {
             if (x >= 0 && y >= 0) {
                 destination.set_at(x as usize, y as usize, self.color);
-                numerator += shortest;
-                if !(numerator < longest) {
-                    numerator -= longest;
-                    x += dx1;
-                    y += dy1;
-                } else {
-                    x += dx2;
-                    y += dy2;
-                }
+            }
+            numerator += shortest;
+            if !(numerator < longest) {
+                numerator -= longest;
+                x += dx1;
+                y += dy1;
+            } else {
+                x += dx2;
+                y += dy2;
             }
         }
     }
