@@ -5,9 +5,12 @@ use console_renderer::{math, Drawable, Screen};
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let test_vec2 = math::Vector2::new(1f64, 5f64);
     let target_vec2 = math::Vector2::new(2f64, 10f64);
-
+    let mut t_vec3 = math::Vector3::new(1i32, 1i32, 1i32);
+    t_vec3 = t_vec3 * 2;
+    let t2_vec3 = math::Vector3::new(2i32, 2i32, 2i32);
     let test_vec2 = test_vec2 * 2f64;
     assert_eq!(test_vec2.x, target_vec2.x);
+    assert_eq!(t_vec3.z, t2_vec3.z);
 
     println!("{:?}", test_vec2);
 
