@@ -1,10 +1,17 @@
 use crate::{math, Drawable, Screen};
 
 #[allow(dead_code)]
+#[derive(Clone, Copy)]
 pub struct Line {
     pub point1: math::Vector2<i32>,
     pub point2: math::Vector2<i32>,
     pub color: char,
+}
+
+#[allow(dead_code)]
+pub struct Cube {
+    position: math::Vector3<i32>,
+    vertices: [math::Vector3<i32>; 8],
 }
 
 impl Drawable for Line {
@@ -49,7 +56,7 @@ impl Drawable for Line {
 
         let mut numerator: i32 = longest >> 1; // divide by 2;
         for _i in 0..longest {
-            if (x >= 0 && y >= 0) {
+            if x >= 0 && y >= 0 {
                 destination.set_at(x as usize, y as usize, self.color);
             }
             numerator += shortest;
@@ -71,6 +78,34 @@ impl Line {
             point1: p1,
             point2: p2,
             color: color,
+        }
+    }
+}
+
+impl Cube {
+    pub fn new(edge_size: i32, position: &math::Vector3<i32>) -> Cube {
+        let mut vertices = [math::Vector3::<i32>::new(position.x, position.y, position.z); 8];
+        vertices[1].x += edge_size;
+
+        vertices[2].x += edge_size;
+        vertices[2].y += edge_size;
+
+        vertices[3].y += edge_size;
+
+        vertices[4].z += edge_size;
+
+        vertices[5].x += edge_size;
+        vertices[5].z += edge_size;
+
+        vertices[6].x += edge_size;
+        vertices[6].y += edge_size;
+        vertices[6].z += edge_size;
+
+        vertices[7].y += edge_size;
+        vertices[7].z += edge_size;
+        Cube {
+            vertices,
+            position: position.clone(),
         }
     }
 }
