@@ -109,3 +109,10 @@ impl Cube {
         }
     }
 }
+
+impl Drawable for Cube {
+    fn draw(&self, destination: &Screen) {
+        todo!();
+    }
+
+}
