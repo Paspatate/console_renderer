@@ -1,4 +1,5 @@
-use console_renderer::shape::Line;
+use console_renderer::math::Vector3;
+use console_renderer::shape::{Line, Cube};
 use console_renderer::{math, Drawable, Screen};
 //use console::Term;
 
@@ -24,17 +25,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         '#',
     );
 
+    let mut t_cube = Cube::new(10, &Vector3::new(-100i32, 20i32, 30i32));
+
     let mut run = true;
-    while (run) {
+    while run {
         //a = (a.cos() * 10f32) + 20f32;
         //b = (b.sin() * 10f32) + 20f32;
         a -= 1.0;
         b -= 1.0;
         t_line.point2.x = a as i32;
         t_line.point2.y = b as i32;
-
+        //t_cube.translate(1, 0, 0);
         screen.clear(None);
-        t_line.draw(&screen);
+        //t_line.draw(&screen);
+        t_cube.draw(&screen);
         Screen::target_fps(30);
     }
 

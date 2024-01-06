@@ -18,7 +18,7 @@ impl Drawable for Line {
     fn draw(&self, destination: &Screen) {
         // Bresenham algorithm modified to work on all octant
         // original code not from me
-        let (mut x, mut y, mut x2, mut y2) =
+        let (mut x, mut y, x2, y2) =
             (self.point1.x, self.point1.y, self.point2.x, self.point2.y);
         let w = x2 - x;
         let h = y2 - y;
@@ -112,7 +112,53 @@ impl Cube {
 
 impl Drawable for Cube {
     fn draw(&self, destination: &Screen) {
-        todo!();
-    }
+        //calculate de projection of each vertice
+        //create the line and draw the line
 
+        let mut projected_vertice = Vec::new();
+        eprintln!("focal lenght : {}", destination.focal_lenght);
+        //calculation of the projection
+        for vertex in self.vertices {
+            // calculated to project from the center of the screen
+            let mut x_screen_proj: i32 =
+                (destination.focal_lenght * vertex.x) / destination.focal_lenght + vertex.z;
+            let mut y_screen_proj: i32 =
+                (destination.focal_lenght * vertex.y) / destination.focal_lenght + vertex.z;
+            
+            eprintln!("before offset vertex: ({},{},{}) ; projection: ({},{})", vertex.x, vertex.y, vertex.z, x_screen_proj, y_screen_proj);
+
+            // translation to to left
+            x_screen_proj = (destination.size.0 as i32 / 2) - x_screen_proj;
+            y_screen_proj = (destination.size.1 as i32 / 2) - y_screen_proj;
+
+            eprintln!("after offset vertex: ({},{},{}) ; projection: ({},{}) ; size : {:?}", vertex.x, vertex.y, vertex.z, x_screen_proj, y_screen_proj, destination.size);
+            
+            projected_vertice.push(math::Vector2::new(
+                x_screen_proj.clone(),
+                y_screen_proj.clone(),
+            ));
+        }
+
+        let color = '#';
+        let mut lines = Vec::new();
+        // front face
+        lines.push(Line::new(projected_vertice[0], projected_vertice[1], color));
+        lines.push(Line::new(projected_vertice[1], projected_vertice[2], color));
+        lines.push(Line::new(projected_vertice[2], projected_vertice[3], color));
+        lines.push(Line::new(projected_vertice[3], projected_vertice[0], color));
+
+        // back face
+        lines.push(Line::new(projected_vertice[4], projected_vertice[5], color));
+        lines.push(Line::new(projected_vertice[5], projected_vertice[6], color));
+        lines.push(Line::new(projected_vertice[6], projected_vertice[7], color));
+        lines.push(Line::new(projected_vertice[7], projected_vertice[4], color));
+
+        // link between the two
+        lines.push(Line::new(projected_vertice[0], projected_vertice[4], color));
+        lines.push(Line::new(projected_vertice[1], projected_vertice[5], color));
+        lines.push(Line::new(projected_vertice[2], projected_vertice[6], color));
+        lines.push(Line::new(projected_vertice[3], projected_vertice[7], color));
+
+        lines.iter().for_each(|x| x.draw(destination));
+    }
 }

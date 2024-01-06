@@ -11,6 +11,7 @@ pub struct Screen {
     size: (u16, u16),
     term: Term,
     elements: Vec<Box<dyn Drawable>>,
+    focal_lenght: i32,
 }
 
 impl Screen {
@@ -22,6 +23,7 @@ impl Screen {
             size: term.size(),
             term,
             elements: Vec::new(),
+            focal_lenght: 100,
         }
     }
 
