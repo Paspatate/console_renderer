@@ -36,6 +36,10 @@ impl Screen {
         let _ = std::io::stdout().flush();
     }
 
+    pub fn set_focal_length(&mut self, new_f_length: i32) {
+        self.focal_lenght = new_f_length;
+    }
+
     // clear the terminal with the background color specified
     pub fn clear(&mut self, bg_color: Option<&Color>) {
         self.size = self.term.size();

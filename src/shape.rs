@@ -126,7 +126,6 @@ impl Drawable for Cube {
         //create the line and draw the line
 
         let mut projected_vertice = Vec::new();
-        eprintln!("focal lenght : {}", destination.focal_lenght);
         //calculation of the projection
         for vertex in self.vertices {
             // calculated to project from the center of the screen
@@ -135,20 +134,10 @@ impl Drawable for Cube {
             let y_screen_proj: i32 =
                 (destination.focal_lenght * vertex.y) / (destination.focal_lenght + vertex.z);
 
-            eprintln!(
-                "before offset vertex: ({},{},{}) ; projection: ({},{})",
-                vertex.x, vertex.y, vertex.z, x_screen_proj, y_screen_proj
-            );
-
             // translation to get the draw coordinate
             // the destination.size is a tuple made as (num rows, num columns)
             let x_drawing_proj: i32 = (destination.size.1 as i32 / 2) + x_screen_proj;
             let y_drawing_proj: i32 = (destination.size.0 as i32 / 2) + y_screen_proj;
-
-            eprintln!(
-                "after offset vertex: ({},{},{}) ; projection: ({},{}) ; size : {:?}",
-                vertex.x, vertex.y, vertex.z, x_drawing_proj, y_drawing_proj, destination.size
-            );
 
             projected_vertice.push(math::Vector2::new(x_drawing_proj, y_drawing_proj));
         }
@@ -173,9 +162,6 @@ impl Drawable for Cube {
         lines.push(Line::new(projected_vertice[2], projected_vertice[6], color));
         lines.push(Line::new(projected_vertice[3], projected_vertice[7], color));
 
-        eprintln!("first line coord {}", lines[0]);
-        for line in lines {
-            line.draw(destination);
-        }
+        lines.iter().for_each(|elem| elem.draw(destination));
     }
 }
