@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use crate::{math, Drawable, Screen};
 
 #[allow(dead_code)]
@@ -18,8 +20,7 @@ impl Drawable for Line {
     fn draw(&self, destination: &Screen) {
         // Bresenham algorithm modified to work on all octant
         // original code not from me
-        let (mut x, mut y, x2, y2) =
-            (self.point1.x, self.point1.y, self.point2.x, self.point2.y);
+        let (mut x, mut y, x2, y2) = (self.point1.x, self.point1.y, self.point2.x, self.point2.y);
         let w = x2 - x;
         let h = y2 - y;
         let (mut dx1, mut dy1, mut dx2, mut dy2) = (0, 0, 0, 0);
@@ -72,6 +73,15 @@ impl Drawable for Line {
     }
 }
 
+impl Display for Line {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(
+            f,
+            "[({}, {}), ({}, {})]",
+            self.point1.x, self.point1.y, self.point2.x, self.point2.y
+        )
+    }
+}
 impl Line {
     pub fn new(p1: math::Vector2<i32>, p2: math::Vector2<i32>, color: char) -> Self {
         Line {
@@ -120,23 +130,27 @@ impl Drawable for Cube {
         //calculation of the projection
         for vertex in self.vertices {
             // calculated to project from the center of the screen
-            let mut x_screen_proj: i32 =
-                (destination.focal_lenght * vertex.x) / destination.focal_lenght + vertex.z;
-            let mut y_screen_proj: i32 =
-                (destination.focal_lenght * vertex.y) / destination.focal_lenght + vertex.z;
-            
-            eprintln!("before offset vertex: ({},{},{}) ; projection: ({},{})", vertex.x, vertex.y, vertex.z, x_screen_proj, y_screen_proj);
+            let x_screen_proj: i32 =
+                (destination.focal_lenght * vertex.x) / (destination.focal_lenght + vertex.z);
+            let y_screen_proj: i32 =
+                (destination.focal_lenght * vertex.y) / (destination.focal_lenght + vertex.z);
 
-            // translation to to left
-            x_screen_proj = (destination.size.0 as i32 / 2) - x_screen_proj;
-            y_screen_proj = (destination.size.1 as i32 / 2) - y_screen_proj;
+            eprintln!(
+                "before offset vertex: ({},{},{}) ; projection: ({},{})",
+                vertex.x, vertex.y, vertex.z, x_screen_proj, y_screen_proj
+            );
 
-            eprintln!("after offset vertex: ({},{},{}) ; projection: ({},{}) ; size : {:?}", vertex.x, vertex.y, vertex.z, x_screen_proj, y_screen_proj, destination.size);
-            
-            projected_vertice.push(math::Vector2::new(
-                x_screen_proj.clone(),
-                y_screen_proj.clone(),
-            ));
+            // translation to get the draw coordinate
+            // the destination.size is a tuple made as (num rows, num columns)
+            let x_drawing_proj: i32 = (destination.size.1 as i32 / 2) + x_screen_proj;
+            let y_drawing_proj: i32 = (destination.size.0 as i32 / 2) + y_screen_proj;
+
+            eprintln!(
+                "after offset vertex: ({},{},{}) ; projection: ({},{}) ; size : {:?}",
+                vertex.x, vertex.y, vertex.z, x_drawing_proj, y_drawing_proj, destination.size
+            );
+
+            projected_vertice.push(math::Vector2::new(x_drawing_proj, y_drawing_proj));
         }
 
         let color = '#';
@@ -159,6 +173,9 @@ impl Drawable for Cube {
         lines.push(Line::new(projected_vertice[2], projected_vertice[6], color));
         lines.push(Line::new(projected_vertice[3], projected_vertice[7], color));
 
-        lines.iter().for_each(|x| x.draw(destination));
+        eprintln!("first line coord {}", lines[0]);
+        for line in lines {
+            line.draw(destination);
+        }
     }
 }

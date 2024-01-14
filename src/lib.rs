@@ -23,7 +23,7 @@ impl Screen {
             size: term.size(),
             term,
             elements: Vec::new(),
-            focal_lenght: 100,
+            focal_lenght: 20,
         }
     }
 

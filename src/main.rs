@@ -1,5 +1,5 @@
 use console_renderer::math::Vector3;
-use console_renderer::shape::{Line, Cube};
+use console_renderer::shape::{Cube, Line};
 use console_renderer::{math, Drawable, Screen};
 //use console::Term;
 
@@ -25,7 +25,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         '#',
     );
 
-    let mut t_cube = Cube::new(10, &Vector3::new(-100i32, 20i32, 30i32));
+    let mut t_cube = Cube::new(50, &Vector3::new(-10i32, -30i32, 30i32));
 
     let mut run = true;
     while run {
